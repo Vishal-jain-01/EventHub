@@ -27,10 +27,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
-    }
+    // Don't auto-redirect here, let AuthContext handle it
+    // Just reject the error and let the calling code handle it
     return Promise.reject(error);
   }
 );
