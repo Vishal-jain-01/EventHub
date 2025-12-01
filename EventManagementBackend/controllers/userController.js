@@ -29,12 +29,12 @@ const login = asyncHandler(async (req, res)=>{
         return res.status(400).json({message:"Fill all fields"});
     }
     const userAvailable = await User.findOne({email});
-    if(!userAvailable.email ){
-        return res.status(404).json({message:"User email is missing"});
+    
+    // Check if user exists first
+    if(!userAvailable){
+        return res.status(401).json({message:"Invalid email or password"});
     }
-    if(!userAvailable.password ){
-        return res.status(404).json({message:"User passowrd is missing"});
-    }
+    
     const isPasswordValid = await bcrypt.compare(password, userAvailable.password);
     if(isPasswordValid){
         const accessToken  = jwt.sign({
@@ -43,11 +43,11 @@ const login = asyncHandler(async (req, res)=>{
                 email:userAvailable.email,
                 id:userAvailable.id
             }
-        },process.env.ACCESSTOKEN, {expiresIn:"15m"});
+        },process.env.ACCESSTOKEN || process.env.JWT_SECRET, {expiresIn:"15m"});
         res.status(200).json({accessToken});
     }
     else{
-        res.status(401).json({message:"User unauthorized"});
+        res.status(401).json({message:"Invalid email or password"});
     }
 })
 const currentUser = asyncHandler(async (req, res)=>{
