@@ -43,7 +43,7 @@ const login = asyncHandler(async (req, res)=>{
                 email:userAvailable.email,
                 id:userAvailable.id
             }
-        },process.env.ACCESSTOKEN || process.env.JWT_SECRET, {expiresIn:"15m"});
+        },process.env.ACCESSTOKEN || process.env.JWT_SECRET, {expiresIn:"7d"});
         res.status(200).json({accessToken});
     }
     else{

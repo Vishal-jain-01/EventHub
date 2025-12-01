@@ -31,7 +31,10 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data);
     } catch (error) {
       console.error('Error fetching current user:', error);
-      logout();
+      // Only logout if it's an auth error (401), not network errors
+      if (error.response?.status === 401) {
+        logout();
+      }
     } finally {
       setLoading(false);
     }
