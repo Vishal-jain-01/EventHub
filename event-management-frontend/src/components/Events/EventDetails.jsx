@@ -48,7 +48,16 @@ const EventDetails = () => {
       console.log('Current user:', user);
       console.log('Event host ID:', response.data?.eventHostedBy?._id);
       console.log('User ID:', user?._id);
-      console.log('Is owner?', user && response.data?.eventHostedBy?._id === user._id);
+      console.log('User id (lowercase):', user?.id);
+      
+      // Check if current user is the event owner
+      const isOwner = user && (
+        response.data?.eventHostedBy?._id === user._id ||
+        response.data?.eventHostedBy?._id === user.id ||
+        response.data?.eventHostedBy === user._id ||
+        response.data?.eventHostedBy === user.id
+      );
+      console.log('Is owner?', isOwner);
       
       // Check if current user is registered for this event
       if (user && response.data?.registeredUsers) {
@@ -59,7 +68,7 @@ const EventDetails = () => {
       }
 
       // Fetch attendees if current user is the event owner
-      if (user && response.data?.eventHostedBy?._id === user._id) {
+      if (isOwner) {
         fetchAttendees();
       }
     } catch (error) {
@@ -80,8 +89,12 @@ const EventDetails = () => {
       console.log('Attendees set:', response.data.attendees?.length || 0);
     } catch (error) {
       console.error('Error fetching attendees:', error);
-      console.error('Error details:', error.response?.data);
-      toast.error('Failed to load attendees');
+      if (error.response?.status === 403) {
+        console.log('User is not authorized to view attendees (not the event owner)');
+      } else {
+        console.error('Error details:', error.response?.data);
+        toast.error('Failed to load attendees');
+      }
     } finally {
       setLoadingAttendees(false);
     }

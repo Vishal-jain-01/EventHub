@@ -6,13 +6,23 @@ import { format, isAfter } from 'date-fns';
 import { eventAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 import { scrollToTop } from '../../utils/scrollUtils';
+import { useAuth } from '../../context/AuthContext';
 
 const EventCard = ({ event, showActions = false, onDelete }) => {
+  const { user } = useAuth();
   const [deleting, setDeleting] = useState(false);
   const eventDate = new Date(event.eventDate);
   const isUpcoming = isAfter(eventDate, new Date());
   const availableSeats = event.TotalSeats - (event.registeredUsersCount || 0);
   const occupancyPercentage = ((event.registeredUsersCount || 0) / event.TotalSeats) * 100;
+  
+  // Check if current user is the event owner
+  const isOwner = user && event.eventHostedBy && (
+    event.eventHostedBy._id === user._id ||
+    event.eventHostedBy._id === user.id ||
+    event.eventHostedBy === user._id ||
+    event.eventHostedBy === user.id
+  );
 
   const getStatusColor = () => {
     if (!isUpcoming) return 'bg-gray-500';
@@ -143,7 +153,7 @@ const EventCard = ({ event, showActions = false, onDelete }) => {
             <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </Link>
           
-          {showActions && isUpcoming && (
+          {showActions && isOwner && isUpcoming && (
             <div className="flex gap-2">
               <Link
                 to={`/edit-event/${event._id}`}
@@ -166,7 +176,7 @@ const EventCard = ({ event, showActions = false, onDelete }) => {
             </div>
           )}
           
-          {showActions && !isUpcoming && (
+          {showActions && isOwner && !isUpcoming && (
             <div className="text-center py-2">
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 Past events cannot be edited

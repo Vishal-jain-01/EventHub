@@ -28,8 +28,30 @@ const Dashboard = () => {
         authAPI.getUserRegistrations()
       ]);
       
-      setUserEvents(eventsResponse.data || []);
-      setRegisteredEvents(registrationsResponse.data || []);
+      console.log('=== DASHBOARD DATA DEBUG ===');
+      console.log('Current User:', user);
+      console.log('User ID:', user?._id || user?.id);
+      console.log('User Events (Created by me):', eventsResponse.data);
+      console.log('Registered Events (I registered for):', registrationsResponse.data);
+      
+      // Ensure we only set events created by this user
+      const myCreatedEvents = (eventsResponse.data || []).filter(event => {
+        const hostId = event.eventHostedBy?._id || event.eventHostedBy;
+        const userId = user?._id || user?.id;
+        return hostId === userId;
+      });
+      
+      // Registered events should only include events with registrationId
+      const myRegisteredEvents = (registrationsResponse.data || []).filter(event => {
+        return event.registrationId; // Only include if has registrationId (means user registered)
+      });
+      
+      console.log('Filtered My Events:', myCreatedEvents);
+      console.log('Filtered Registered Events:', myRegisteredEvents);
+      console.log('=== END DEBUG ===');
+      
+      setUserEvents(myCreatedEvents);
+      setRegisteredEvents(myRegisteredEvents);
     } catch (error) {
       console.error('Error fetching user data:', error);
       toast.error('Failed to load dashboard data');
@@ -221,7 +243,7 @@ const Dashboard = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                   >
-                    <EventCard event={event} />
+                    <EventCard event={event} showActions={false} />
                   </motion.div>
                 ))}
               </div>

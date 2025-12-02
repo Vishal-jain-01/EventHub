@@ -9,68 +9,108 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: 'url(/bgheader.png)' }}
+        >
+          <div className="absolute inset-0 bg-black/40"></div>
+        </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <motion.h1
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.2, delay: 0.5, type: "spring", bounce: 0.3 }}
-              className="text-6xl md:text-8xl lg:text-9xl font-black mb-8 leading-tight"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-6xl md:text-8xl lg:text-9xl font-black mb-6 leading-tight"
             >
               <span 
-                className="bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent"
+                className="bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-2xl"
               >
                 EventHub
               </span>
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1.5 }}
-              className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto font-light leading-relaxed"
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-2xl md:text-3xl text-gray-200 mb-4 max-w-4xl mx-auto font-bold leading-relaxed"
             >
-              Experience the future of event management. Built for creators, designed for impact.
+              Create, Manage & Experience Events
             </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="text-lg md:text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
+            >
+              The all-in-one platform to organize conferences, workshops, meetups, and celebrations with real-time updates and seamless registration.
+            </motion.p>
+
+            {/* Feature Pills */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="flex flex-wrap justify-center gap-3 mb-12"
+            >
+              {[
+                { icon: '📅', text: 'Easy Scheduling' },
+                { icon: '👥', text: 'Guest Management' },
+                { icon: '📊', text: 'Live Analytics' },
+                { icon: '✉️', text: 'Email Notifications' }
+              ].map((feature, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  className="px-5 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 hover:border-purple-400 hover:bg-white/20 transition-all duration-300"
+                >
+                  <span className="text-sm font-semibold flex items-center gap-2 text-white">
+                    <span className="text-xl">{feature.icon}</span>
+                    {feature.text}
+                  </span>
+                </motion.div>
+              ))}
+            </motion.div>
 
             {/* Action Buttons */}
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 2 }}
+              transition={{ duration: 0.8, delay: 1 }}
               className="flex flex-col sm:flex-row gap-6 justify-center items-center"
             >
               <Link to="/create-event">
                 <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: "0 25px 50px rgba(59, 130, 246, 0.4)" }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl font-bold text-lg shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 border border-blue-500/30"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-10 py-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-xl font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all duration-300"
                 >
-                  <span className="relative z-10 flex items-center">
+                  <span className="flex items-center gap-2">
                     Create Event
-                    <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
                   </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </motion.button>
               </Link>
 
               <Link to="/events">
                 <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: "0 25px 50px rgba(168, 85, 247, 0.4)" }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group relative px-8 py-4 bg-transparent border-2 border-purple-500/50 rounded-xl font-bold text-lg hover:bg-purple-500/10 transition-all duration-300"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-10 py-4 bg-white/10 backdrop-blur-md text-white border-2 border-white/30 rounded-xl font-bold text-lg hover:bg-white/20 hover:border-white/50 transition-all duration-300"
                 >
-                  <span className="relative z-10 flex items-center text-purple-300 group-hover:text-white">
+                  <span className="flex items-center gap-2">
                     Explore Events
-                    <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </span>
